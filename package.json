@@ -1,0 +1,46 @@
+{
+  "name": "serverless-resource-tagging-plugin",
+  "version": "1.0.0",
+  "description": "Serverless stackTags apply once to resources at first-time deploy. This plugin applies them on every deploy so that updates are applied to existing deploys.",
+  "main": "index.js",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "lint": "eslint --fix test/**/*.js lib/*.js index.js",
+    "test": "npm run lint && jest"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "collectCoverageFrom": ["./lib/**"],
+    "coverageThreshold": {
+      "global": {
+        "lines": 90
+      }
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tveal/serverless-resource-tagging-plugin.git"
+  },
+  "keywords": [
+    "serverless plugin",
+    "serverless aws tagging",
+    "aws serverless plugin",
+    "cloudformation stack tagging",
+    "stackTags"
+  ],
+  "author": "TVeal",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tveal/serverless-resource-tagging-plugin/issues"
+  },
+  "homepage": "https://github.com/tveal/serverless-resource-tagging-plugin#readme",
+  "devDependencies": {
+    "eslint": "^8.25.0",
+    "jest": "^29.2.0"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21"
+  }
+}
