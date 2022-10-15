@@ -1,0 +1,50 @@
+service: sample-resource-tagging-plugin
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  stackTags:
+    MyOrg:stackTag: provider.stackTags
+    MyOrg:Name: ${self:service}
+    MyOrg:Region: ${opt:region}
+    MyOrg:Environment: ${opt:stage}
+  tags:
+    MyOrg:tag: provider.tags
+    MyOrg:Name: DUPLICATE
+  environment:
+    SAMPLE_TABLE: ${opt:stage}-${self:service}
+
+plugins:
+  # Toggle between published and local source plugin
+  # - serverless-resource-tagging-plugin
+  - ../index.js
+
+custom:
+  resourceTagging:
+    exclusive: false
+    excludes:
+      - ServerlessDeploymentBucket
+    types:
+      - AWS::DynamoDB::Table
+
+resources:
+  Resources:
+    DbTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.SAMPLE_TABLE}
+        AttributeDefinitions:
+          - AttributeName: hk
+            AttributeType: S
+        KeySchema:
+          - AttributeName: hk
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        Tags:
+          - Key: MyOrg:TableName
+            Value: ${self:provider.environment.SAMPLE_TABLE}
+            # SingleIndex/MultiIndex
+          - Key: MyOrg:TableStructure
+            Value: SingleIndex
+

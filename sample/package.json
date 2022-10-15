@@ -1,0 +1,19 @@
+{
+  "name": "sample-resource-tagging-plugin",
+  "version": "1.0.0",
+  "description": "Sample usage of serverless-resource-tagging-plugin",
+  "main": "index.js",
+  "scripts": {
+    "pkg:sandbox:e": "sls package --verbose -r us-east-1 -s sandbox",
+    "pkg:sandbox:w": "sls package --verbose -r us-west-2 -s sandbox",
+    "dp:sandbox:e": "sls deploy --verbose -r us-east-1 -s sandbox --force",
+    "dp:sandbox:w": "sls deploy --verbose -r us-west-2 -s sandbox --force",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "TVeal",
+  "license": "MIT",
+  "devDependencies": {
+    "serverless": "^3.23.0"
+  }
+}
