@@ -4,7 +4,19 @@ Serverless stackTags apply once to AWS resources at first-time deploy. This
 plugin applies them on every deploy so that updates are applied to existing
 deploys.
 
-NOTE: For AWS Provider Only
+NOTES:
+- For AWS Provider Only
+- Applies both provider.stackTags and provider.tags to supported resources
+- Skips resources that have deploy-time CloudFormation conditional on the root
+  `Properties` value, such as
+    ```yml
+    Properties: 
+      Fn::If:
+        - IsOtherRegionDeployed
+        - ${file(additional.yml):BucketProps.withReplication}
+        - ${file(additional.yml):BucketProps.noReplication}
+    ```
+
 ## Install plugin
 
 ```
@@ -28,10 +40,13 @@ plugins:
 
 ## Supported AWS Resources
 
+A _tiny_ subset of supported resources:
 ```
+AWS::ApiGateway::DomainName
 AWS::ApiGateway::RestApi
 AWS::ApiGateway::Stage
 AWS::CloudFront::Distribution
+AWS::Cognito::UserPool
 AWS::DynamoDB::Table
 AWS::IAM::Role
 AWS::Kinesis::Stream
@@ -41,8 +56,11 @@ AWS::S3::Bucket
 AWS::SNS::Topic
 AWS::SQS::Queue
 AWS::StepFunctions::StateMachine
-AWS::WAFv2::WebACL
 ```
+For the many other supported formats, see
+[the source here](https://github.com/tveal/serverless-resource-tagging-plugin/blob/main/lib/supportedTypes.js)
+
+## Additional Config
 
 Optionally, you can add other AWS resource types for tagging with
 ```yml
