@@ -1,6 +1,6 @@
 {
   "name": "serverless-resource-tagging-plugin",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Serverless stackTags apply once to AWS resources at first-time deploy. This plugin applies them on every deploy so that updates are applied to existing deploys.",
   "main": "index.js",
   "files": [

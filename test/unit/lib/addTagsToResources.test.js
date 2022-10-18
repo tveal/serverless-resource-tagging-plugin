@@ -59,14 +59,17 @@ describe('addTagsToResources', () => {
 
       get log() {
         return {
-          info: (msg) => {
-            logOutput.push(`INFO ${msg}`);
-          },
           error: (msg) => {
             logOutput.push(`ERROR ${msg}`);
           },
           warn: (msg) => {
             logOutput.push(`WARN ${msg}`);
+          },
+          info: (msg) => {
+            logOutput.push(`INFO ${msg}`);
+          },
+          debug: (msg) => {
+            logOutput.push(`DEBUG ${msg}`);
           },
         };
       }
@@ -95,9 +98,9 @@ describe('addTagsToResources', () => {
           'MyOrg:tag': 'provider.tags',
         }, null, 2)}`,
         'INFO Skipping tags for ServerlessDeploymentBucket',
-        'WARN Skipping global tagging for MyCustomResource (AWS::Custom::Resource)',
-        'WARN Skipping global tagging for MyBucket (AWS::S3::Bucket)',
-        'WARN Skipping global tagging for BucketNoProps (AWS::S3::Bucket)',
+        'DEBUG Skipping unsupported type for MyCustomResource (AWS::Custom::Resource)',
+        'WARN Skipping invalid properties for MyBucket (AWS::S3::Bucket)',
+        'WARN Skipping invalid properties for BucketNoProps (AWS::S3::Bucket)',
         `INFO Added global tags to resources: ${JSON.stringify([
           'MyLambda',
           'MyQueue',

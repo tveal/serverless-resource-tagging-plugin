@@ -22,6 +22,7 @@ plugins:
 
 custom:
   resourceTagging:
+    log: info # one of [error, warn, info, debug]
     exclusive: false
     excludes:
       - ServerlessDeploymentBucket
