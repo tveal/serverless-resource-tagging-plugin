@@ -88,3 +88,10 @@ custom:
       - AWS::SQS::Queue
       - ServerlessDeploymentBucket
 ```
+
+To adjust the log level (default: info)
+```yml
+custom:
+  resourceTagging:
+    log: debug # one of [error, warn, info, debug]
+```

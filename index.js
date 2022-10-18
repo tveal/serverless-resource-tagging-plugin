@@ -1,3 +1,4 @@
+const { isLevelEnabled } = require('./lib/logLevels');
 const { addTagsToResources } = require('./lib/addTagsToResources');
 
 const PLUGIN_ID = 'resource-tagging-plugin';
@@ -11,15 +12,23 @@ class Plugin {
   }
 
   get log() {
+    const logIfEnabled = (loggerLevel, msg) => {
+      if (isLevelEnabled(this.logLevel, loggerLevel)) {
+        this.serverless.cli.log(`[${PLUGIN_ID}] ${loggerLevel} ${msg}`);
+      }
+    };
     return {
-      info: (msg) => {
-        this.serverless.cli.log(`[${PLUGIN_ID}] INFO ${msg}`);
-      },
       error: (msg) => {
-        this.serverless.cli.log(`[${PLUGIN_ID}] ERROR ${msg}`);
+        logIfEnabled('ERROR', msg);
       },
       warn: (msg) => {
-        this.serverless.cli.log(`[${PLUGIN_ID}] WARN ${msg}`);
+        logIfEnabled('WARN', msg);
+      },
+      info: (msg) => {
+        logIfEnabled('INFO', msg);
+      },
+      debug: (msg) => {
+        logIfEnabled('DEBUG', msg);
       },
     };
   }
