@@ -28,22 +28,7 @@ describe('addTagsToResources', () => {
       expect(config).toEqual({
         excludes: [ 'AWS::DynamoDB::Table' ],
         types: [
-          'AWS::ApiGatewayV2::Api',
-          'AWS::ApiGatewayV2::Stage',
-          'AWS::SSM::Parameter',
-          'AWS::ApiGateway::RestApi',
-          'AWS::ApiGateway::Stage',
-          'AWS::CloudFront::Distribution',
-          // 'AWS::DynamoDB::Table',
-          'AWS::IAM::Role',
-          'AWS::Kinesis::Stream',
-          'AWS::Lambda::Function',
-          'AWS::Logs::LogGroup',
-          'AWS::S3::Bucket',
-          'AWS::SNS::Topic',
-          'AWS::SQS::Queue',
-          'AWS::StepFunctions::StateMachine',
-          'AWS::WAFv2::WebACL',
+          ...PLUGIN_DEFAULT_CONFIG.types.filter(t => t !== 'AWS::DynamoDB::Table'),
           'AWS::Custom::Resource',
         ],
       });
@@ -86,13 +71,13 @@ describe('addTagsToResources', () => {
         };
       }
     }
-    it('should log config', () => {
+    it('should NOT log config', () => {
       const testPlugin = new TestPlugin({}, {});
 
       expect(logOutput).toEqual([]);
       testPlugin.invoke();
       expect(logOutput).toEqual([
-        `INFO plugin config: ${JSON.stringify(PLUGIN_DEFAULT_CONFIG, null, 2)}`,
+        'INFO Global Tags: {}',
         'WARN No global tags defined [provider.stackTags, provider.tags]',
       ]);
     });
@@ -103,13 +88,16 @@ describe('addTagsToResources', () => {
       expect(logOutput).toEqual([]);
       testPlugin.invoke();
       expect(logOutput).toEqual([
-        `INFO plugin config: ${JSON.stringify({
-          ...PLUGIN_DEFAULT_CONFIG,
-          excludes: ['ServerlessDeploymentBucket'],
+        `INFO Global Tags: ${JSON.stringify({
+          'MyOrg:stackTag': 'provider.stackTags',
+          'MyOrg:Name': 'my-service',
+          'MyOrg:Environment': 'sample',
+          'MyOrg:tag': 'provider.tags',
         }, null, 2)}`,
         'INFO Skipping tags for ServerlessDeploymentBucket',
-        'WARN Properties not available for MyCustomResource (AWS::Custom::Resource)',
-        'WARN Properties not available for MyBucket (AWS::S3::Bucket)',
+        'WARN Skipping global tagging for MyCustomResource (AWS::Custom::Resource)',
+        'WARN Skipping global tagging for MyBucket (AWS::S3::Bucket)',
+        'WARN Skipping global tagging for BucketNoProps (AWS::S3::Bucket)',
         `INFO Added global tags to resources: ${JSON.stringify([
           'MyLambda',
           'MyQueue',
@@ -180,6 +168,9 @@ describe('addTagsToResources', () => {
               { msg: 'false case' },
             ],
           },
+        },
+        BucketNoProps: {
+          Type: 'AWS::S3::Bucket',
         },
         MySsmParam: {
           Type: 'AWS::SSM::Parameter',
