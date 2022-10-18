@@ -50,7 +50,6 @@ const PLUGIN_DEFAULT_CONFIG = {
     'AWS::ApiGatewayV2::DomainName',
     'AWS::ApiGatewayV2::Stage',
     'AWS::ApiGatewayV2::VpcLink',
-    'AWS::CodeStarNotifications::NotificationRule',
     'AWS::Cognito::UserPool',
     'AWS::EKS::Nodegroup',
     'AWS::Glue::Crawler',
